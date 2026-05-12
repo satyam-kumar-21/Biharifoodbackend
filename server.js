@@ -27,7 +27,10 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: ['https://biharifoodfrontend.vercel.app', 'http://localhost:3000'],
+  credentials: true
+}));
 
 // Routes
 app.use('/api/users', userRoutes);

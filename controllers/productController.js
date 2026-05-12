@@ -85,6 +85,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     hindiName,
     price,
     description,
+    shortDescription,
     images,
     brand,
     category,
@@ -106,6 +107,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.hindiName = hindiName || product.hindiName;
     product.price = price || product.price;
     product.description = description || product.description;
+    product.shortDescription = shortDescription || product.shortDescription;
     product.images = images || product.images;
     product.brand = brand || product.brand;
     product.category = category || product.category;

@@ -49,6 +49,9 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    shortDescription: {
+      type: String,
+    },
     ingredients: {
       type: String,
     },

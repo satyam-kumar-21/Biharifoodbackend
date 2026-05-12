@@ -121,15 +121,15 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 
   if (order) {
     order.status = status || order.status;
-    if (location) {
-      order.currentLocation = location;
-      order.trackingHistory.push({
-        status: status || order.status,
-        location,
-        description: description || `Order is at ${location}`,
-        timestamp: Date.now(),
-      });
-    }
+    order.currentLocation = location || order.currentLocation || 'Warehouse';
+    
+    order.trackingHistory.push({
+      status: order.status,
+      location: order.currentLocation,
+      description: description || `Status updated to ${order.status}`,
+      timestamp: Date.now(),
+    });
+
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } else {

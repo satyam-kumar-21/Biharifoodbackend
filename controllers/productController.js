@@ -96,6 +96,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     ingredients,
     shelfLife,
     weightOptions,
+    additionalInfo,
   } = req.body;
 
   const product = await Product.findById(req.params.id);
@@ -116,6 +117,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.ingredients = ingredients || product.ingredients;
     product.shelfLife = shelfLife || product.shelfLife;
     product.weightOptions = weightOptions || product.weightOptions;
+    product.additionalInfo = additionalInfo || product.additionalInfo;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);

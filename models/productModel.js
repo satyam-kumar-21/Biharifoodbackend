@@ -99,6 +99,9 @@ const productSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    additionalInfo: {
+      type: String,
+    },
   },
   {
     timestamps: true,

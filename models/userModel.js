@@ -24,6 +24,11 @@ const userSchema = mongoose.Schema(
     phone: {
       type: String,
     },
+    isBlocked: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   {
     timestamps: true,

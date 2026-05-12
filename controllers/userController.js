@@ -11,6 +11,11 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
+    if (user.isBlocked) {
+      res.status(401);
+      throw new Error('Your account has been blocked by the admin. Please contact support.');
+    }
+
     generateToken(res, user._id);
 
     res.json({
@@ -168,6 +173,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.isAdmin = Boolean(req.body.isAdmin);
+    user.isBlocked = Boolean(req.body.isBlocked);
 
     const updatedUser = await user.save();
 
@@ -176,6 +182,7 @@ const updateUser = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      isBlocked: updatedUser.isBlocked,
     });
   } else {
     res.status(404);

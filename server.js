@@ -20,6 +20,9 @@ connectDB();
 
 const app = express();
 
+// Trust proxy for Vercel
+app.set('trust proxy', 1);
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
@@ -28,7 +31,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-  origin: ['https://biharifoodfrontend.vercel.app', 'http://localhost:3000'],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://biharifoodfrontend.vercel.app',
+      'http://localhost:3000'
+    ];
+    // Allow Vercel preview deployments
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 

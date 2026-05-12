@@ -116,11 +116,20 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route   PUT /api/orders/:id/status
 // @access  Private/Admin
 const updateOrderStatus = asyncHandler(async (req, res) => {
-  const { status } = req.body;
+  const { status, location, description } = req.body;
   const order = await Order.findById(req.params.id);
 
   if (order) {
-    order.status = status;
+    order.status = status || order.status;
+    if (location) {
+      order.currentLocation = location;
+      order.trackingHistory.push({
+        status: status || order.status,
+        location,
+        description: description || `Order is at ${location}`,
+        timestamp: Date.now(),
+      });
+    }
     const updatedOrder = await order.save();
     res.json(updatedOrder);
   } else {

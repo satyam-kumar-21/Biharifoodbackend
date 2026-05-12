@@ -80,6 +80,18 @@ const orderSchema = mongoose.Schema(
       default: 'Pending',
       enum: ['Pending', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'],
     },
+    currentLocation: {
+      type: String,
+      default: 'Warehouse',
+    },
+    trackingHistory: [
+      {
+        status: { type: String },
+        location: { type: String },
+        timestamp: { type: Date, default: Date.now },
+        description: { type: String },
+      },
+    ],
   },
   {
     timestamps: true,

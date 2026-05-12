@@ -19,7 +19,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const category = req.query.category ? { category: req.query.category } : {};
   
-  const visibility = req.query.admin === 'true' ? {} : { isActive: true };
+  const visibility = req.query.admin === 'true' ? {} : { isActive: { $ne: false } };
 
   const count = await Product.countDocuments({ ...keyword, ...category, ...visibility });
   const products = await Product.find({ ...keyword, ...category, ...visibility })

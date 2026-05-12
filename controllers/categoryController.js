@@ -5,7 +5,7 @@ const Category = require('../models/categoryModel');
 // @route   GET /api/categories
 // @access  Public
 const getCategories = asyncHandler(async (req, res) => {
-  const visibility = req.query.admin === 'true' ? {} : { isActive: true };
+  const visibility = req.query.admin === 'true' ? {} : { isActive: { $ne: false } };
   const categories = await Category.find({ ...visibility });
   res.json(categories);
 });

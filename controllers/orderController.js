@@ -83,6 +83,13 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       email_address: req.body.email_address,
     };
 
+    order.trackingHistory.push({
+      status: 'Payment Received',
+      location: 'Online',
+      description: 'Payment has been successfully verified.',
+      timestamp: Date.now(),
+    });
+
     const updatedOrder = await order.save();
 
     res.json(updatedOrder);
@@ -102,6 +109,14 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
     order.status = 'Delivered';
+    order.currentLocation = 'Customer Doorstep';
+    
+    order.trackingHistory.push({
+      status: 'Delivered',
+      location: 'Customer Doorstep',
+      description: 'The order has been successfully delivered to the customer.',
+      timestamp: Date.now(),
+    });
 
     const updatedOrder = await order.save();
 

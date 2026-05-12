@@ -105,6 +105,11 @@ const productSchema = mongoose.Schema(
     additionalInfo: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
   },
   {
     timestamps: true,

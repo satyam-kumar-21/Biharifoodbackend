@@ -18,9 +18,11 @@ const getProducts = asyncHandler(async (req, res) => {
     : {};
 
   const category = req.query.category ? { category: req.query.category } : {};
+  
+  const visibility = req.query.admin === 'true' ? {} : { isActive: true };
 
-  const count = await Product.countDocuments({ ...keyword, ...category });
-  const products = await Product.find({ ...keyword, ...category })
+  const count = await Product.countDocuments({ ...keyword, ...category, ...visibility });
+  const products = await Product.find({ ...keyword, ...category, ...visibility })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
@@ -98,6 +100,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     shelfLife,
     weightOptions,
     additionalInfo,
+    isActive,
   } = req.body;
 
   const product = await Product.findById(req.params.id);
@@ -120,6 +123,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.shelfLife = shelfLife || product.shelfLife;
     product.weightOptions = weightOptions || product.weightOptions;
     product.additionalInfo = additionalInfo || product.additionalInfo;
+    product.isActive = isActive !== undefined ? isActive : product.isActive;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);

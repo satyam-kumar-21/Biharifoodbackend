@@ -5,7 +5,8 @@ const Category = require('../models/categoryModel');
 // @route   GET /api/categories
 // @access  Public
 const getCategories = asyncHandler(async (req, res) => {
-  const categories = await Category.find({});
+  const visibility = req.query.admin === 'true' ? {} : { isActive: true };
+  const categories = await Category.find({ ...visibility });
   res.json(categories);
 });
 
@@ -47,8 +48,31 @@ const deleteCategory = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update category
+// @route   PUT /api/categories/:id
+// @access  Private/Admin
+const updateCategory = asyncHandler(async (req, res) => {
+  const { name, hindiName, image, description, isActive } = req.body;
+  const category = await Category.findById(req.params.id);
+
+  if (category) {
+    category.name = name || category.name;
+    category.hindiName = hindiName || category.hindiName;
+    category.image = image || category.image;
+    category.description = description || category.description;
+    category.isActive = isActive !== undefined ? isActive : category.isActive;
+
+    const updatedCategory = await category.save();
+    res.json(updatedCategory);
+  } else {
+    res.status(404);
+    throw new Error('Category not found');
+  }
+});
+
 module.exports = {
   getCategories,
   createCategory,
   deleteCategory,
+  updateCategory,
 };

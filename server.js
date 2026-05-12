@@ -32,16 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      'https://biharifoodfrontend.vercel.app',
-      'http://localhost:3000'
-    ];
-    // Allow Vercel preview deployments
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    console.log('Request Origin:', origin);
+    // Allow all for debugging
+    callback(null, true);
   },
   credentials: true
 }));

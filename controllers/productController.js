@@ -174,6 +174,41 @@ const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Delete a review
+// @route   DELETE /api/products/:id/reviews/:reviewId
+// @access  Private/Admin
+const deleteReview = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const reviewIndex = product.reviews.findIndex(
+      (r) => r._id.toString() === req.params.reviewId
+    );
+
+    if (reviewIndex !== -1) {
+      product.reviews.splice(reviewIndex, 1);
+      product.numReviews = product.reviews.length;
+
+      if (product.numReviews > 0) {
+        product.rating =
+          product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+          product.reviews.length;
+      } else {
+        product.rating = 0;
+      }
+
+      await product.save();
+      res.json({ message: 'Review deleted' });
+    } else {
+      res.status(404);
+      throw new Error('Review not found');
+    }
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+});
+
 // @desc    Get top rated products
 // @route   GET /api/products/top
 // @access  Public
@@ -190,5 +225,6 @@ module.exports = {
   createProduct,
   updateProduct,
   createProductReview,
+  deleteReview,
   getTopProducts,
 };

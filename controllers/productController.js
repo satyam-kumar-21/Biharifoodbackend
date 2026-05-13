@@ -84,7 +84,7 @@ const createProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
-    hindiName,
+    unit,
     price,
     description,
     shortDescription,
@@ -107,10 +107,10 @@ const updateProduct = asyncHandler(async (req, res) => {
 
   if (product) {
     product.name = name || product.name;
-    product.hindiName = hindiName || product.hindiName;
+    product.unit = unit !== undefined ? unit : product.unit;
     product.price = price || product.price;
-    product.description = description || product.description;
-    product.shortDescription = shortDescription || product.shortDescription;
+    product.description = description !== undefined ? description : product.description;
+    product.shortDescription = shortDescription !== undefined ? shortDescription : product.shortDescription;
     product.images = images || product.images;
     product.brand = brand || product.brand;
     product.category = category || product.category;
@@ -122,7 +122,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.ingredients = ingredients || product.ingredients;
     product.shelfLife = shelfLife || product.shelfLife;
     product.weightOptions = weightOptions || product.weightOptions;
-    product.additionalInfo = additionalInfo || product.additionalInfo;
+    product.additionalInfo = additionalInfo !== undefined ? additionalInfo : product.additionalInfo;
     product.isActive = isActive !== undefined ? isActive : product.isActive;
 
     const updatedProduct = await product.save();

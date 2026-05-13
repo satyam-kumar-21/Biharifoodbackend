@@ -27,7 +27,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    hindiName: {
+    unit: {
       type: String,
     },
     images: [
@@ -102,9 +102,12 @@ const productSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    additionalInfo: {
-      type: String,
-    },
+    additionalInfo: [
+      {
+        name: { type: String },
+        value: { type: String },
+      },
+    ],
     isActive: {
       type: Boolean,
       required: true,

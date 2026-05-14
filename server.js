@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const morgan = require('morgan');
@@ -17,9 +18,8 @@ const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 dotenv.config();
 
-connectDB();
-
 const app = express();
+app.use(compression());
 
 // Trust proxy for Vercel
 app.set('trust proxy', 1);
@@ -33,7 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
-    console.log('Request Origin:', origin);
     // Allow all for debugging
     callback(null, true);
   },
@@ -51,7 +50,15 @@ app.use('/api/contacts', contactRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname, '/frontend/dist')));
+  app.use(express.static(path.join(__dirname, '/frontend/dist'), {
+    maxAge: '1y',
+    etag: true,
+    setHeaders: (res, path) => {
+      if (path.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    }
+  }));
 
   app.get('*', (req, res) =>
     res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
@@ -65,11 +72,20 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const startServer = async () => {
+  try {
+    await connectDB();
+    const PORT = process.env.PORT || 5000;
+    app.listen(
+      PORT,
+      console.log(
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+      )
+    );
+  } catch (error) {
+    console.error(`Error: ${error.message}`.red);
+    process.exit(1);
+  }
+};
 
-app.listen(
-  PORT,
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-  )
-);
+startServer();

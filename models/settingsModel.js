@@ -32,6 +32,10 @@ const settingsSchema = mongoose.Schema(
       enum: ['mobile_otp', 'mobile_password', 'email_password_otp'],
       default: 'email_password_otp',
     },
+    freeShippingThreshold: {
+      type: Number,
+      default: 500,
+    },
     // Add more settings here as needed (e.g., shipping rates, tax rates)
   },
   {

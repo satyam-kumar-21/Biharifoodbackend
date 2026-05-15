@@ -14,6 +14,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const shippingRoutes = require('./routes/shippingRoutes');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -48,6 +49,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/shipping', shippingRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();

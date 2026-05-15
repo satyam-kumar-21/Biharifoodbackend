@@ -23,7 +23,7 @@ const getSettings = asyncHandler(async (req, res) => {
 // @route   PUT /api/settings
 // @access  Private/Admin
 const updateSettings = asyncHandler(async (req, res) => {
-  const { isCodEnabled, isOnlinePaymentEnabled, logo, address, email, phone, authMode } = req.body;
+  const { isCodEnabled, isOnlinePaymentEnabled, logo, address, email, phone, authMode, freeShippingThreshold } = req.body;
   
   let settings = await Settings.findOne();
   
@@ -35,6 +35,7 @@ const updateSettings = asyncHandler(async (req, res) => {
     settings.email = email !== undefined ? email : settings.email;
     settings.phone = phone !== undefined ? phone : settings.phone;
     settings.authMode = authMode !== undefined ? authMode : settings.authMode;
+    settings.freeShippingThreshold = freeShippingThreshold !== undefined ? freeShippingThreshold : settings.freeShippingThreshold;
     
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -47,6 +48,7 @@ const updateSettings = asyncHandler(async (req, res) => {
       email,
       phone,
       authMode,
+      freeShippingThreshold,
     });
     res.json(newSettings);
   }

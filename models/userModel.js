@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema(
   {
@@ -9,24 +8,33 @@ const userSchema = mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
+      sparse: true, // allows multiple null values
+      default: null,
     },
+    phone: {
+      type: String,
+      unique: true,
+      sparse: true, // allows multiple null values
+      default: null,
+    },
+    // password kept for admin backward compat but not required for normal users
     password: {
       type: String,
-      required: true,
+      default: null,
     },
     isAdmin: {
       type: Boolean,
       required: true,
       default: false,
     },
-    phone: {
-      type: String,
-    },
     isBlocked: {
       type: Boolean,
       required: true,
+      default: false,
+    },
+    isVerified: {
+      type: Boolean,
       default: false,
     },
   },
@@ -35,15 +43,18 @@ const userSchema = mongoose.Schema(
   }
 );
 
+// Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  const bcrypt = require('bcryptjs');
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.pre('save', async function () {
+// Encrypt password using bcrypt
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
-    return;
+    next();
   }
-
+  const bcrypt = require('bcryptjs');
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });

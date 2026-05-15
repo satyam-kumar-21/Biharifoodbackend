@@ -3,6 +3,8 @@ const router = express.Router();
 const {
   authUser,
   registerUser,
+  sendOtpHandler,
+  verifyOtpHandler,
   logoutUser,
   getUserProfile,
   updateUserProfile,
@@ -13,15 +15,23 @@ const {
 } = require('../controllers/userController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
-router.route('/').post(registerUser).get(protect, admin, getUsers);
-router.post('/auth', authUser);
+// Public routes
+router.post('/', registerUser); // Standard registration
+router.post('/login', authUser); // Standard login
+router.post('/send-otp', sendOtpHandler);
+router.post('/verify-otp', verifyOtpHandler);
 router.post('/logout', logoutUser);
-router
-  .route('/profile')
+
+// Profile
+router.route('/profile')
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
-router
-  .route('/:id')
+
+// Admin user management
+router.route('/')
+  .get(protect, admin, getUsers);
+
+router.route('/:id')
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById)
   .put(protect, admin, updateUser);

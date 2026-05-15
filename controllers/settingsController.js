@@ -12,6 +12,7 @@ const getSettings = asyncHandler(async (req, res) => {
     settings = await Settings.create({
       isCodEnabled: true,
       isOnlinePaymentEnabled: true,
+      authMode: 'email_password_otp',
     });
   }
   
@@ -22,7 +23,7 @@ const getSettings = asyncHandler(async (req, res) => {
 // @route   PUT /api/settings
 // @access  Private/Admin
 const updateSettings = asyncHandler(async (req, res) => {
-  const { isCodEnabled, isOnlinePaymentEnabled, logo, address, email, phone } = req.body;
+  const { isCodEnabled, isOnlinePaymentEnabled, logo, address, email, phone, authMode } = req.body;
   
   let settings = await Settings.findOne();
   
@@ -33,6 +34,7 @@ const updateSettings = asyncHandler(async (req, res) => {
     settings.address = address !== undefined ? address : settings.address;
     settings.email = email !== undefined ? email : settings.email;
     settings.phone = phone !== undefined ? phone : settings.phone;
+    settings.authMode = authMode !== undefined ? authMode : settings.authMode;
     
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -44,6 +46,7 @@ const updateSettings = asyncHandler(async (req, res) => {
       address,
       email,
       phone,
+      authMode,
     });
     res.json(newSettings);
   }

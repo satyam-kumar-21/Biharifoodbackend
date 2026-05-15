@@ -27,6 +27,11 @@ const settingsSchema = mongoose.Schema(
       type: String,
       default: '+91 0000000000',
     },
+    authMode: {
+      type: String,
+      enum: ['mobile_otp', 'mobile_password', 'email_password_otp'],
+      default: 'email_password_otp',
+    },
     // Add more settings here as needed (e.g., shipping rates, tax rates)
   },
   {

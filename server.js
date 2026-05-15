@@ -1,7 +1,8 @@
 const path = require('path');
 const express = require('express');
-const compression = require('compression');
 const dotenv = require('dotenv');
+dotenv.config();
+const compression = require('compression');
 const colors = require('colors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -89,3 +90,4 @@ const startServer = async () => {
 };
 
 startServer();
+

@@ -27,6 +27,7 @@ const orderSchema = mongoose.Schema(
       postalCode: { type: String, required: true },
       country: { type: String, required: true, default: 'India' },
       phone: { type: String, required: true },
+      landmark: { type: String },
     },
     paymentMethod: {
       type: String,

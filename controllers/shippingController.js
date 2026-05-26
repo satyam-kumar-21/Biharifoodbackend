@@ -29,9 +29,8 @@ const calculateShippingRate = asyncHandler(async (req, res) => {
   try {
     // If we don't have credentials, we can't call Shiprocket
     if (!process.env.SHIPROCKET_EMAIL || !process.env.SHIPROCKET_PASSWORD) {
-        // Fallback to base shipping if Shiprocket is not configured
         return res.json({
-            rate: 40,
+            rate: 0,
             courier_name: 'Standard Delivery',
             estimated_delivery: '3-5 Days',
             isFallback: true

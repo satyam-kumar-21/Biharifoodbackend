@@ -36,6 +36,10 @@ const settingsSchema = mongoose.Schema(
       type: Number,
       default: 500,
     },
+    shippingCharge: {
+      type: Number,
+      default: 0,
+    },
     // Add more settings here as needed (e.g., shipping rates, tax rates)
   },
   {

@@ -32,7 +32,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       paymentMethod,
       itemsPrice,
       taxPrice,
-      shippingPrice,
+      shippingPrice: 0,
       totalPrice,
     });
 
@@ -110,7 +110,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     order.deliveredAt = Date.now();
     order.status = 'Delivered';
     order.currentLocation = 'Customer Doorstep';
-    
+
     order.trackingHistory.push({
       status: 'Delivered',
       location: 'Customer Doorstep',
@@ -137,7 +137,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   if (order) {
     order.status = status || order.status;
     order.currentLocation = location || order.currentLocation || 'Warehouse';
-    
+
     order.trackingHistory.push({
       status: order.status,
       location: order.currentLocation,
